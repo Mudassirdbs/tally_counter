@@ -1,557 +1,602 @@
-<!-- JSON-LD structured data for SEO -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Online Tasbeeh Counter — Free Digital Dhikr &amp; Tasbih</title>
+  <!-- JSON-LD structured data for SEO -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Online Tasbeeh Counter",
-  "alternateName": ["Digital Tasbih Counter", "Dhikr Counter", "Islamic Bead Counter", "Subhanallah Counter"],
-  "applicationCategory": "LifestyleApplication",
-  "operatingSystem": "Web Browser",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "description": "A free online tasbeeh counter for Muslims to count Subhanallah (33x), Alhamdulillah (33x), Allahu Akbar (34x), La ilaha illallah (100x) and custom dhikr. No app download required.",
-  "inLanguage": ["en", "ar"]
-}
-</script>
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Online Tasbeeh Counter",
+      "alternateName": ["Digital Tasbih Counter", "Dhikr Counter", "Islamic Bead Counter", "Subhanallah Counter"],
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web Browser",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "A free online tasbeeh counter for Muslims to count Subhanallah (33x), Alhamdulillah (33x), Allahu Akbar (34x), La ilaha illallah (100x) and custom dhikr. No app download required.",
+      "inLanguage": ["en", "ar"]
+    }
+    </script>
+</head>
+<body>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap');
+    
+    /* Prevent horizontal scroll and ensure mobile-friendly base */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap');
+    /* ── Outer shell: full-viewport on mobile, centred card on desktop ── */
+    #tasbeeh-shell {
+      all: revert;
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100vw;
+      /* Fill full screen height on mobile — feels like a native app */
+      min-height: 100svh;   /* svh = small viewport height, accounts for browser chrome */
+      min-height: 100dvh;   /* dynamic viewport when browser UI shows/hides */
+      background: #faf7f0;
+      /* Safe area for notched phones (e.g. iPhone X+) */
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    #tasbeeh-shell *, #tasbeeh-shell *::before, #tasbeeh-shell *::after {
+      all: revert;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* ── SR-only for SEO/a11y ── */
+    #tasbeeh-shell .tb-sr-only {
+      position: absolute !important;
+      width: 1px !important; height: 1px !important;
+      padding: 0 !important; margin: -1px !important;
+      overflow: hidden !important; clip: rect(0,0,0,0) !important;
+      white-space: nowrap !important; border: 0 !important;
+    }
+    
+    /* ── Inner card layout ── */
+    #tasbeeh-wrap {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-width: 0; /* allow flex item to shrink below content size */
+      min-height: 100svh;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 28px 20px 24px;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      padding-bottom: max(24px, env(safe-area-inset-bottom));
+      background: #faf7f0;
+      text-align: center;
+      font-family: 'Amiri', Georgia, serif;
+      color: #1a2e22;
+    }
+    
+    /* On desktop (≥ 600px): switch to a centred card */
+    @media (min-width: 600px) {
+      #tasbeeh-shell {
+        min-height: unset;
+        background: #f0ede4;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 40px 16px;
+      }
+      #tasbeeh-wrap {
+        min-height: unset;
+        border: 1px solid #d4c9a8;
+        border-radius: 16px;
+        box-shadow: 0 4px 32px rgba(45,106,79,0.10);
+        padding: 36px 32px 28px;
+      }
+    }
+    
+    /* ── Top section: ornament + dhikr name ── */
+    #tasbeeh-wrap .tb-top {
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    #tasbeeh-wrap .tb-ornament {
+      display: block;
+      color: #b5862a;
+      font-size: 13px;
+      letter-spacing: 6px;
+      opacity: 0.55;
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+    
+    #tasbeeh-wrap .tb-heading {
+      display: block;
+      font-family: 'Amiri', Georgia, serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #8a9e8e;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      line-height: 1.4;
+    }
+    
+    #tasbeeh-wrap .tb-subheading {
+      display: block;
+      font-size: 9px;
+      color: #c8bfa0;
+      letter-spacing: 2px;
+      line-height: 1.4;
+    }
+    
+    /* ── Dhikr phrase ── */
+    #tasbeeh-wrap .tb-phrase-wrap {
+      display: block;
+      padding: 20px 0 0;
+    }
+    
+    #tasbeeh-wrap .tb-phrase {
+      display: block;
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: clamp(22px, 6vw, 28px);
+      color: #2d6a4f;
+      line-height: 1.7;
+      margin-bottom: 4px;
+      word-break: keep-all;
+    }
+    
+    #tasbeeh-wrap .tb-meaning {
+      display: block;
+      font-size: 11px;
+      color: #8a9e8e;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+    
+    /* ── Preset pills ── */
+    #tasbeeh-wrap .tb-selector {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 20px 0 0;
+      list-style: none;
+    }
 
-/* ── Outer shell: full-viewport on mobile, centred card on desktop ── */
-#tasbeeh-shell {
-  all: revert;
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  /* Fill full screen height on mobile — feels like a native app */
-  min-height: 100svh;   /* svh = small viewport height, accounts for browser chrome */
-  background: #faf7f0;
-}
+    /* On very narrow screens, smaller pills so all 5 fit */
+    @media (max-width: 380px) {
+      #tasbeeh-wrap .tb-selector { gap: 5px; }
+      #tasbeeh-wrap .tb-sel-btn {
+        padding: 6px 10px;
+        min-height: 32px;
+        font-size: 12px;
+      }
+    }
+    
+    #tasbeeh-wrap .tb-selector li {
+      display: inline-flex;
+      list-style: none;
+    }
+    
+    #tasbeeh-wrap .tb-sel-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 14px;
+      min-height: 36px;
+      border: 1px solid #d4c9a8;
+      border-radius: 20px;
+      background: transparent;
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 13px;
+      color: #8a9e8e;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+      line-height: 1.4;
+      text-decoration: none;
+      box-shadow: none;
+    }
+    
+    #tasbeeh-wrap .tb-sel-btn[aria-pressed="true"] {
+      border-color: #2d6a4f;
+      background: #2d6a4f;
+      color: #fff;
+    }
+    
+    /* ── Custom target input ── */
+    #tasbeeh-wrap .tb-custom-wrap {
+      display: none;
+      padding-top: 14px;
+    }
+    
+    #tasbeeh-wrap .tb-custom-label {
+      display: block;
+      font-size: 10px;
+      color: #8a9e8e;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    
+    #tasbeeh-wrap .tb-custom-input {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #d4c9a8;
+      border-radius: 8px;
+      background: #fff;
+      font-family: 'Amiri', serif;
+      font-size: 16px; /* 16px min prevents iOS zoom */
+      color: #1a2e22;
+      text-align: center;
+      outline: none;
+      line-height: 1.5;
+      box-shadow: none;
+      -moz-appearance: textfield;
+    }
+    
+    #tasbeeh-wrap .tb-custom-input::-webkit-outer-spin-button,
+    #tasbeeh-wrap .tb-custom-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    
+    /* ── BIG counter number — the hero element ── */
+    #tasbeeh-wrap .tb-counter-wrap {
+      display: block;
+      /* flex-grow pushes the button to the bottom on mobile */
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 0;
+    }
+    
+    #tasbeeh-wrap .tb-count {
+      display: block;
+      font-family: 'Amiri', serif;
+      /* Big on mobile, scales up on tablet */
+      font-size: clamp(96px, 28vw, 140px);
+      font-weight: 700;
+      color: #1a2e22;
+      line-height: 1;
+      margin-bottom: 8px;
+      transition: transform 0.08s ease;
+    }
+    
+    #tasbeeh-wrap .tb-count.pop { transform: scale(1.08); }
+    
+    #tasbeeh-wrap .tb-target {
+      display: block;
+      font-size: 12px;
+      color: #8a9e8e;
+      letter-spacing: 1px;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    
+    /* Progress bar */
+    #tasbeeh-wrap .tb-progress-wrap {
+      display: block;
+      width: 60%;
+      height: 3px;
+      background: #e0d9c4;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    #tasbeeh-wrap .tb-progress-bar {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2d6a4f, #40916c);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    
+    /* Completion message */
+    #tasbeeh-wrap .tb-complete-msg {
+      display: none;
+      font-size: 12px;
+      color: #b5862a;
+      letter-spacing: 1px;
+      font-style: italic;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    
+    #tasbeeh-wrap .tb-complete-msg.show { display: block; }
+    
+    /* ── Bottom controls ── */
+    #tasbeeh-wrap .tb-controls {
+      display: block;
+      width: 100%;
+      padding-top: 8px;
+    }
+    
+    /* Main COUNT button — large, thumb-friendly */
+    #tasbeeh-wrap .tb-btn {
+      display: block;
+      width: 100%;
+      /* Tall on mobile — easy to tap anywhere */
+      padding: 22px 20px;
+      background: #2d6a4f;
+      color: #faf7f0;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Amiri', serif;
+      font-size: clamp(18px, 5vw, 22px);
+      letter-spacing: 1px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: background 0.15s, transform 0.08s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      line-height: 1.4;
+      text-decoration: none;
+      box-shadow: 0 2px 12px rgba(45,106,79,0.25);
+    }
+    
+    #tasbeeh-wrap .tb-btn:active {
+      background: #40916c;
+      transform: scale(0.98);
+      box-shadow: none;
+    }
+    
+    /* Undo / Reset row */
+    #tasbeeh-wrap .tb-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    #tasbeeh-wrap .tb-small-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 10px;
+      min-height: 48px;
+      background: transparent;
+      border: 1px solid #d4c9a8;
+      border-radius: 8px;
+      font-family: 'Amiri', serif;
+      font-size: 14px;
+      color: #8a9e8e;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      line-height: 1.4;
+      text-decoration: none;
+      box-shadow: none;
+    }
+    
+    #tasbeeh-wrap .tb-small-btn:active {
+      border-color: #2d6a4f;
+      color: #2d6a4f;
+    }
+    
+    @media (hover: hover) {
+      #tasbeeh-wrap .tb-btn:hover       { background: #40916c; }
+      #tasbeeh-wrap .tb-small-btn:hover { border-color: #2d6a4f; color: #2d6a4f; }
+      #tasbeeh-wrap .tb-sel-btn:hover:not([aria-pressed="true"]) { border-color: #2d6a4f; color: #2d6a4f; }
+    }
 
-#tasbeeh-shell *, #tasbeeh-shell *::before, #tasbeeh-shell *::after {
-  all: revert;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    /* Mobile: ensure tap targets and no overflow */
+    @media (max-width: 599px) {
+      #tasbeeh-wrap {
+        padding-top: max(28px, env(safe-area-inset-top));
+      }
+    }
+    </style>
 
-/* ── SR-only for SEO/a11y ── */
-#tasbeeh-shell .tb-sr-only {
-  position: absolute !important;
-  width: 1px !important; height: 1px !important;
-  padding: 0 !important; margin: -1px !important;
-  overflow: hidden !important; clip: rect(0,0,0,0) !important;
-  white-space: nowrap !important; border: 0 !important;
-}
-
-/* ── Inner card layout ── */
-#tasbeeh-wrap {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100svh;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 28px 20px 24px;
-  background: #faf7f0;
-  text-align: center;
-  font-family: 'Amiri', Georgia, serif;
-  color: #1a2e22;
-}
-
-/* On desktop (≥ 600px): switch to a centred card */
-@media (min-width: 600px) {
-  #tasbeeh-shell {
-    min-height: unset;
-    background: #f0ede4;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 40px 16px;
-  }
-  #tasbeeh-wrap {
-    min-height: unset;
-    border: 1px solid #d4c9a8;
-    border-radius: 16px;
-    box-shadow: 0 4px 32px rgba(45,106,79,0.10);
-    padding: 36px 32px 28px;
-  }
-}
-
-/* ── Top section: ornament + dhikr name ── */
-#tasbeeh-wrap .tb-top {
-  display: block;
-  margin-bottom: 4px;
-}
-
-#tasbeeh-wrap .tb-ornament {
-  display: block;
-  color: #b5862a;
-  font-size: 13px;
-  letter-spacing: 6px;
-  opacity: 0.55;
-  margin-bottom: 14px;
-  line-height: 1;
-}
-
-#tasbeeh-wrap .tb-heading {
-  display: block;
-  font-family: 'Amiri', Georgia, serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: #8a9e8e;
-  letter-spacing: 3.5px;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-  line-height: 1.4;
-}
-
-#tasbeeh-wrap .tb-subheading {
-  display: block;
-  font-size: 9px;
-  color: #c8bfa0;
-  letter-spacing: 2px;
-  line-height: 1.4;
-}
-
-/* ── Dhikr phrase ── */
-#tasbeeh-wrap .tb-phrase-wrap {
-  display: block;
-  padding: 20px 0 0;
-}
-
-#tasbeeh-wrap .tb-phrase {
-  display: block;
-  font-family: 'Noto Naskh Arabic', serif;
-  font-size: clamp(22px, 6vw, 28px);
-  color: #2d6a4f;
-  line-height: 1.7;
-  margin-bottom: 4px;
-  word-break: keep-all;
-}
-
-#tasbeeh-wrap .tb-meaning {
-  display: block;
-  font-size: 11px;
-  color: #8a9e8e;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  line-height: 1.5;
-}
-
-/* ── Preset pills ── */
-#tasbeeh-wrap .tb-selector {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 20px 0 0;
-  list-style: none;
-}
-
-#tasbeeh-wrap .tb-selector li {
-  display: inline-flex;
-  list-style: none;
-}
-
-#tasbeeh-wrap .tb-sel-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 14px;
-  min-height: 36px;
-  border: 1px solid #d4c9a8;
-  border-radius: 20px;
-  background: transparent;
-  font-family: 'Noto Naskh Arabic', serif;
-  font-size: 13px;
-  color: #8a9e8e;
-  cursor: pointer;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  white-space: nowrap;
-  line-height: 1.4;
-  text-decoration: none;
-  box-shadow: none;
-}
-
-#tasbeeh-wrap .tb-sel-btn[aria-pressed="true"] {
-  border-color: #2d6a4f;
-  background: #2d6a4f;
-  color: #fff;
-}
-
-/* ── Custom target input ── */
-#tasbeeh-wrap .tb-custom-wrap {
-  display: none;
-  padding-top: 14px;
-}
-
-#tasbeeh-wrap .tb-custom-label {
-  display: block;
-  font-size: 10px;
-  color: #8a9e8e;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-  line-height: 1.5;
-}
-
-#tasbeeh-wrap .tb-custom-input {
-  display: block;
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #d4c9a8;
-  border-radius: 8px;
-  background: #fff;
-  font-family: 'Amiri', serif;
-  font-size: 16px; /* 16px min prevents iOS zoom */
-  color: #1a2e22;
-  text-align: center;
-  outline: none;
-  line-height: 1.5;
-  box-shadow: none;
-  -moz-appearance: textfield;
-}
-
-#tasbeeh-wrap .tb-custom-input::-webkit-outer-spin-button,
-#tasbeeh-wrap .tb-custom-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-
-/* ── BIG counter number — the hero element ── */
-#tasbeeh-wrap .tb-counter-wrap {
-  display: block;
-  /* flex-grow pushes the button to the bottom on mobile */
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 0;
-}
-
-#tasbeeh-wrap .tb-count {
-  display: block;
-  font-family: 'Amiri', serif;
-  /* Big on mobile, scales up on tablet */
-  font-size: clamp(96px, 28vw, 140px);
-  font-weight: 700;
-  color: #1a2e22;
-  line-height: 1;
-  margin-bottom: 8px;
-  transition: transform 0.08s ease;
-}
-
-#tasbeeh-wrap .tb-count.pop { transform: scale(1.08); }
-
-#tasbeeh-wrap .tb-target {
-  display: block;
-  font-size: 12px;
-  color: #8a9e8e;
-  letter-spacing: 1px;
-  line-height: 1.5;
-  margin-bottom: 14px;
-}
-
-/* Progress bar */
-#tasbeeh-wrap .tb-progress-wrap {
-  display: block;
-  width: 60%;
-  height: 3px;
-  background: #e0d9c4;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-#tasbeeh-wrap .tb-progress-bar {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #2d6a4f, #40916c);
-  border-radius: 2px;
-  transition: width 0.3s ease;
-}
-
-/* Completion message */
-#tasbeeh-wrap .tb-complete-msg {
-  display: none;
-  font-size: 12px;
-  color: #b5862a;
-  letter-spacing: 1px;
-  font-style: italic;
-  margin-top: 12px;
-  line-height: 1.5;
-}
-
-#tasbeeh-wrap .tb-complete-msg.show { display: block; }
-
-/* ── Bottom controls ── */
-#tasbeeh-wrap .tb-controls {
-  display: block;
-  width: 100%;
-  padding-top: 8px;
-}
-
-/* Main COUNT button — large, thumb-friendly */
-#tasbeeh-wrap .tb-btn {
-  display: block;
-  width: 100%;
-  /* Tall on mobile — easy to tap anywhere */
-  padding: 22px 20px;
-  background: #2d6a4f;
-  color: #faf7f0;
-  border: none;
-  border-radius: 12px;
-  font-family: 'Amiri', serif;
-  font-size: clamp(18px, 5vw, 22px);
-  letter-spacing: 1px;
-  cursor: pointer;
-  margin-bottom: 12px;
-  transition: background 0.15s, transform 0.08s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  line-height: 1.4;
-  text-decoration: none;
-  box-shadow: 0 2px 12px rgba(45,106,79,0.25);
-}
-
-#tasbeeh-wrap .tb-btn:active {
-  background: #40916c;
-  transform: scale(0.98);
-  box-shadow: none;
-}
-
-/* Undo / Reset row */
-#tasbeeh-wrap .tb-actions {
-  display: flex;
-  gap: 10px;
-}
-
-#tasbeeh-wrap .tb-small-btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 13px 10px;
-  min-height: 48px;
-  background: transparent;
-  border: 1px solid #d4c9a8;
-  border-radius: 8px;
-  font-family: 'Amiri', serif;
-  font-size: 14px;
-  color: #8a9e8e;
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  line-height: 1.4;
-  text-decoration: none;
-  box-shadow: none;
-}
-
-#tasbeeh-wrap .tb-small-btn:active {
-  border-color: #2d6a4f;
-  color: #2d6a4f;
-}
-
-@media (hover: hover) {
-  #tasbeeh-wrap .tb-btn:hover       { background: #40916c; }
-  #tasbeeh-wrap .tb-small-btn:hover { border-color: #2d6a4f; color: #2d6a4f; }
-  #tasbeeh-wrap .tb-sel-btn:hover:not([aria-pressed="true"]) { border-color: #2d6a4f; color: #2d6a4f; }
-}
-</style>
-
-<!-- Outer shell fills the viewport on mobile -->
-<section
-  id="tasbeeh-shell"
-  itemscope
-  itemtype="https://schema.org/SoftwareApplication"
-  lang="en"
->
-  <!-- SEO text — visible to crawlers, hidden from users -->
-  <div class="tb-sr-only">
-    <h2 itemprop="name">Online Tasbeeh Counter — Free Digital Tasbih &amp; Dhikr Counter</h2>
-    <p itemprop="description">
-      A free online tasbeeh counter for Muslims. Count your daily dhikr — Subhanallah (33 times),
-      Alhamdulillah (33 times), Allahu Akbar (34 times), and La ilaha illallah (100 times) — or set
-      a custom dhikr target. No app download needed. Works in any browser on mobile or desktop.
-      Also known as a tasbih counter, digital prayer bead counter, or Islamic bead counter.
-    </p>
-    <meta itemprop="applicationCategory" content="LifestyleApplication" />
-    <meta itemprop="operatingSystem" content="Web Browser" />
-  </div>
-
-  <article id="tasbeeh-wrap" aria-label="Online Tasbeeh Counter">
-
-    <!-- Header -->
-    <div class="tb-top">
-      <span class="tb-ornament" aria-hidden="true">❧ ✦ ❧</span>
-      <strong class="tb-heading" aria-hidden="true">Tasbeeh Counter</strong>
-      <span class="tb-subheading" aria-hidden="true">Online Digital Dhikr</span>
-    </div>
-
-    <!-- Active dhikr -->
-    <div class="tb-phrase-wrap">
-      <p class="tb-phrase" id="tb-phrase" lang="ar" aria-label="Current dhikr in Arabic">سُبْحَانَ اللَّهِ</p>
-      <p class="tb-meaning" id="tb-meaning">Subhanallah</p>
-    </div>
-
-    <!-- Preset selector -->
-    <nav aria-label="Select dhikr type">
-      <ul class="tb-selector" role="list">
-        <li><button class="tb-sel-btn" data-dhikr="0" aria-pressed="true"  title="Subhanallah — 33x">سبحان الله</button></li>
-        <li><button class="tb-sel-btn" data-dhikr="1" aria-pressed="false" title="Alhamdulillah — 33x">الحمد لله</button></li>
-        <li><button class="tb-sel-btn" data-dhikr="2" aria-pressed="false" title="Allahu Akbar — 34x">الله أكبر</button></li>
-        <li><button class="tb-sel-btn" data-dhikr="3" aria-pressed="false" title="La ilaha illallah — 100x">لا إله إلا الله</button></li>
-        <li><button class="tb-sel-btn" data-dhikr="4" aria-pressed="false" title="Custom dhikr">Other</button></li>
-      </ul>
-    </nav>
-
-    <!-- Custom target (Other) -->
-    <div class="tb-custom-wrap" id="tb-custom-wrap" role="group" aria-label="Custom dhikr target">
-      <label class="tb-custom-label" for="tb-custom-input">Set your target count</label>
-      <input
-        class="tb-custom-input"
-        id="tb-custom-input"
-        type="number" min="1" max="9999" value="33"
-        inputmode="numeric"
-        aria-label="Custom dhikr target number"
-      />
-    </div>
-
-    <!-- Counter — grows to fill remaining height on mobile -->
-    <div
-      class="tb-counter-wrap"
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-      aria-label="Dhikr count"
+    <!-- Outer shell fills the viewport on mobile -->
+    <section
+      id="tasbeeh-shell"
+      itemscope
+      itemtype="https://schema.org/SoftwareApplication"
+      lang="en"
     >
-      <span class="tb-count" id="tb-count">0</span>
-      <span class="tb-target" id="tb-target">0 / 33</span>
-
-      <div
-        class="tb-progress-wrap"
-        role="progressbar"
-        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-        aria-label="Dhikr progress"
-        id="tb-progress-wrap"
-      >
-        <div class="tb-progress-bar" id="tb-bar"></div>
+      <!-- SEO text — visible to crawlers, hidden from users -->
+      <div class="tb-sr-only">
+        <h2 itemprop="name">Online Tasbeeh Counter — Free Digital Tasbih &amp; Dhikr Counter</h2>
+        <p itemprop="description">
+          A free online tasbeeh counter for Muslims. Count your daily dhikr — Subhanallah (33 times),
+          Alhamdulillah (33 times), Allahu Akbar (34 times), and La ilaha illallah (100 times) — or set
+          a custom dhikr target. No app download needed. Works in any browser on mobile or desktop.
+          Also known as a tasbih counter, digital prayer bead counter, or Islamic bead counter.
+        </p>
+        <meta itemprop="applicationCategory" content="LifestyleApplication" />
+        <meta itemprop="operatingSystem" content="Web Browser" />
       </div>
+    
+      <article id="tasbeeh-wrap" aria-label="Online Tasbeeh Counter">
+    
+        <!-- Header -->
+        <div class="tb-top">
+          <span class="tb-ornament" aria-hidden="true">❧ ✦ ❧</span>
+          <strong class="tb-heading" aria-hidden="true">Tasbeeh Counter</strong>
+          <span class="tb-subheading" aria-hidden="true">Online Digital Dhikr</span>
+        </div>
+    
+        <!-- Active dhikr -->
+        <div class="tb-phrase-wrap">
+          <p class="tb-phrase" id="tb-phrase" lang="ar" aria-label="Current dhikr in Arabic">سُبْحَانَ اللَّهِ</p>
+          <p class="tb-meaning" id="tb-meaning">Subhanallah</p>
+        </div>
+    
+        <!-- Preset selector -->
+        <nav aria-label="Select dhikr type">
+          <ul class="tb-selector" role="list">
+            <li><button class="tb-sel-btn" data-dhikr="0" aria-pressed="true"  title="Subhanallah — 33x">سبحان الله</button></li>
+            <li><button class="tb-sel-btn" data-dhikr="1" aria-pressed="false" title="Alhamdulillah — 33x">الحمد لله</button></li>
+            <li><button class="tb-sel-btn" data-dhikr="2" aria-pressed="false" title="Allahu Akbar — 34x">الله أكبر</button></li>
+            <li><button class="tb-sel-btn" data-dhikr="3" aria-pressed="false" title="La ilaha illallah — 100x">لا إله إلا الله</button></li>
+            <li><button class="tb-sel-btn" data-dhikr="4" aria-pressed="false" title="Custom dhikr">Other</button></li>
+          </ul>
+        </nav>
+    
+        <!-- Custom target (Other) -->
+        <div class="tb-custom-wrap" id="tb-custom-wrap" role="group" aria-label="Custom dhikr target">
+          <label class="tb-custom-label" for="tb-custom-input">Set your target count</label>
+          <input
+            class="tb-custom-input"
+            id="tb-custom-input"
+            type="number" min="1" max="9999" value="33"
+            inputmode="numeric"
+            aria-label="Custom dhikr target number"
+          />
+        </div>
+    
+        <!-- Counter — grows to fill remaining height on mobile -->
+        <div
+          class="tb-counter-wrap"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          aria-label="Dhikr count"
+        >
+          <span class="tb-count" id="tb-count">0</span>
+          <span class="tb-target" id="tb-target">0 / 33</span>
+    
+          <div
+            class="tb-progress-wrap"
+            role="progressbar"
+            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+            aria-label="Dhikr progress"
+            id="tb-progress-wrap"
+          >
+            <div class="tb-progress-bar" id="tb-bar"></div>
+          </div>
+    
+          <p class="tb-complete-msg" id="tb-complete" role="alert" aria-live="assertive">
+            ✦ Masha'Allah — set complete ✦
+          </p>
+        </div>
+    
+        <!-- Bottom controls -->
+        <div class="tb-controls">
+          <button class="tb-btn" id="tb-main-btn"
+            aria-label="Count dhikr — tap to increment"
+            title="Tap to count your dhikr"
+          >ذِكْر &nbsp;·&nbsp; Count</button>
+    
+          <div class="tb-actions">
+            <button class="tb-small-btn" id="tb-undo-btn"
+              aria-label="Undo last count"
+              title="Subtract one from the count"
+            >− Undo</button>
+            <button class="tb-small-btn" id="tb-reset-btn"
+              aria-label="Reset counter to zero"
+              title="Reset the counter back to zero"
+            >Reset</button>
+          </div>
+        </div>
+    
+      </article>
+    </section>
 
-      <p class="tb-complete-msg" id="tb-complete" role="alert" aria-live="assertive">
-        ✦ Masha'Allah — set complete ✦
-      </p>
-    </div>
-
-    <!-- Bottom controls -->
-    <div class="tb-controls">
-      <button class="tb-btn" id="tb-main-btn"
-        aria-label="Count dhikr — tap to increment"
-        title="Tap to count your dhikr"
-      >ذِكْر &nbsp;·&nbsp; Count</button>
-
-      <div class="tb-actions">
-        <button class="tb-small-btn" id="tb-undo-btn"
-          aria-label="Undo last count"
-          title="Subtract one from the count"
-        >− Undo</button>
-        <button class="tb-small-btn" id="tb-reset-btn"
-          aria-label="Reset counter to zero"
-          title="Reset the counter back to zero"
-        >Reset</button>
-      </div>
-    </div>
-
-  </article>
-</section>
-
-<script>
-(function () {
-  'use strict';
-
-  var root        = document.getElementById('tasbeeh-wrap');
-  var countEl     = root.querySelector('#tb-count');
-  var phraseEl    = root.querySelector('#tb-phrase');
-  var meaningEl   = root.querySelector('#tb-meaning');
-  var targetEl    = root.querySelector('#tb-target');
-  var barEl       = root.querySelector('#tb-bar');
-  var progressWrap= root.querySelector('#tb-progress-wrap');
-  var completeEl  = root.querySelector('#tb-complete');
-  var customWrap  = root.querySelector('#tb-custom-wrap');
-  var customInput = root.querySelector('#tb-custom-input');
-  var selBtns     = root.querySelectorAll('.tb-sel-btn');
-
-  var dhikrList = [
-    { arabic: 'سُبْحَانَ اللَّهِ',           roman: 'Subhanallah',       target: 33  },
-    { arabic: 'الْحَمْدُ لِلَّهِ',            roman: 'Alhamdulillah',     target: 33  },
-    { arabic: 'اللَّهُ أَكْبَرُ',             roman: 'Allahu Akbar',      target: 34  },
-    { arabic: 'لَا إِلَٰهَ إِلَّا اللَّهُ', roman: 'La ilaha illallah', target: 100 },
-    { arabic: '\u2014',                        roman: 'Other',             target: 33  }
-  ];
-
-  var current = 0;
-  var count   = 0;
-
-  function render() {
-    var d   = dhikrList[current];
-    var pct = Math.min(count / d.target * 100, 100);
-    countEl.textContent  = count;
-    targetEl.textContent = count + ' / ' + d.target;
-    barEl.style.width    = pct + '%';
-    progressWrap.setAttribute('aria-valuenow', Math.round(pct));
-    if (count > 0 && count % d.target === 0) {
-      completeEl.classList.add('show');
-    } else {
-      completeEl.classList.remove('show');
-    }
-  }
-
-  function setDhikr(idx) {
-    current = idx;
-    count   = 0;
-    var d   = dhikrList[idx];
-    phraseEl.textContent  = d.arabic;
-    meaningEl.textContent = d.roman;
-    customWrap.style.display = idx === 4 ? 'block' : 'none';
-    if (idx === 4) {
-      dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
-    }
-    selBtns.forEach(function (btn, i) {
-      btn.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
-    });
-    render();
-  }
-
-  selBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      setDhikr(parseInt(btn.getAttribute('data-dhikr'), 10));
-    });
-  });
-
-  customInput.addEventListener('input', function () {
-    if (current === 4) {
-      dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
+    <script>
+    (function () {
+      'use strict';
+    
+      var root        = document.getElementById('tasbeeh-wrap');
+      var countEl     = root.querySelector('#tb-count');
+      var phraseEl    = root.querySelector('#tb-phrase');
+      var meaningEl   = root.querySelector('#tb-meaning');
+      var targetEl    = root.querySelector('#tb-target');
+      var barEl       = root.querySelector('#tb-bar');
+      var progressWrap= root.querySelector('#tb-progress-wrap');
+      var completeEl  = root.querySelector('#tb-complete');
+      var customWrap  = root.querySelector('#tb-custom-wrap');
+      var customInput = root.querySelector('#tb-custom-input');
+      var selBtns     = root.querySelectorAll('.tb-sel-btn');
+    
+      var dhikrList = [
+        { arabic: 'سُبْحَانَ اللَّهِ',           roman: 'Subhanallah',       target: 33  },
+        { arabic: 'الْحَمْدُ لِلَّهِ',            roman: 'Alhamdulillah',     target: 33  },
+        { arabic: 'اللَّهُ أَكْبَرُ',             roman: 'Allahu Akbar',      target: 34  },
+        { arabic: 'لَا إِلَٰهَ إِلَّا اللَّهُ', roman: 'La ilaha illallah', target: 100 },
+        { arabic: '\u2014',                        roman: 'Other',             target: 33  }
+      ];
+    
+      var current = 0;
+      var count   = 0;
+    
+      function render() {
+        var d   = dhikrList[current];
+        var pct = Math.min(count / d.target * 100, 100);
+        countEl.textContent  = count;
+        targetEl.textContent = count + ' / ' + d.target;
+        barEl.style.width    = pct + '%';
+        progressWrap.setAttribute('aria-valuenow', Math.round(pct));
+        if (count > 0 && count % d.target === 0) {
+          completeEl.classList.add('show');
+        } else {
+          completeEl.classList.remove('show');
+        }
+      }
+    
+      function setDhikr(idx) {
+        current = idx;
+        count   = 0;
+        var d   = dhikrList[idx];
+        phraseEl.textContent  = d.arabic;
+        meaningEl.textContent = d.roman;
+        customWrap.style.display = idx === 4 ? 'block' : 'none';
+        if (idx === 4) {
+          dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
+        }
+        selBtns.forEach(function (btn, i) {
+          btn.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
+        });
+        render();
+      }
+    
+      selBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          setDhikr(parseInt(btn.getAttribute('data-dhikr'), 10));
+        });
+      });
+    
+      customInput.addEventListener('input', function () {
+        if (current === 4) {
+          dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
+          render();
+        }
+      });
+    
+      root.querySelector('#tb-main-btn').addEventListener('click', function () {
+        count++;
+        countEl.classList.remove('pop');
+        void countEl.offsetWidth;
+        countEl.classList.add('pop');
+        setTimeout(function () { countEl.classList.remove('pop'); }, 120);
+        render();
+      });
+    
+      root.querySelector('#tb-undo-btn').addEventListener('click', function () {
+        if (count > 0) { count--; render(); }
+      });
+    
+      root.querySelector('#tb-reset-btn').addEventListener('click', function () {
+        count = 0;
+        render();
+      });
+    
       render();
-    }
-  });
+    }());
+    </script>
 
-  root.querySelector('#tb-main-btn').addEventListener('click', function () {
-    count++;
-    countEl.classList.remove('pop');
-    void countEl.offsetWidth;
-    countEl.classList.add('pop');
-    setTimeout(function () { countEl.classList.remove('pop'); }, 120);
-    render();
-  });
-
-  root.querySelector('#tb-undo-btn').addEventListener('click', function () {
-    if (count > 0) { count--; render(); }
-  });
-
-  root.querySelector('#tb-reset-btn').addEventListener('click', function () {
-    count = 0;
-    render();
-  });
-
-  render();
-}());
-</script>
+</body>
+</html>
