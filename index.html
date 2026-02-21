@@ -1,0 +1,386 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap');
+
+  /* ── Hard reset: undo any theme styles leaking into the widget ── */
+  #tasbeeh-wrap {
+    all: revert;
+    --tb-green:       #2d6a4f;
+    --tb-green-light: #40916c;
+    --tb-gold:        #b5862a;
+    --tb-cream:       #faf7f0;
+    --tb-text:        #1a2e22;
+    --tb-muted:       #8a9e8e;
+    --tb-border:      #d4c9a8;
+    display: block;
+    font-family: 'Amiri', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--tb-text);
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    text-align: center;
+    background: var(--tb-cream);
+    border: 1px solid var(--tb-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(45,106,79,0.08);
+    box-sizing: border-box;
+  }
+
+  /* Reset every child so theme styles cannot cascade in */
+  #tasbeeh-wrap *, #tasbeeh-wrap *::before, #tasbeeh-wrap *::after {
+    all: revert;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  #tasbeeh-wrap .tb-ornament {
+    display: block;
+    color: var(--tb-gold);
+    font-size: 16px;
+    margin-bottom: 20px;
+    opacity: 0.7;
+    letter-spacing: 6px;
+    line-height: 1.5;
+  }
+
+  #tasbeeh-wrap .tb-phrase {
+    display: block;
+    font-family: 'Noto Naskh Arabic', serif;
+    font-size: 22px;
+    color: var(--tb-green);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    line-height: 1.6;
+  }
+
+  #tasbeeh-wrap .tb-meaning {
+    display: block;
+    font-size: 12px;
+    color: var(--tb-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  #tasbeeh-wrap .tb-selector {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  #tasbeeh-wrap .tb-sel-btn {
+    display: inline-block;
+    padding: 5px 14px;
+    border: 1px solid var(--tb-border);
+    border-radius: 20px;
+    background: transparent;
+    font-family: 'Noto Naskh Arabic', serif;
+    font-size: 13px;
+    color: var(--tb-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1.5;
+    text-decoration: none;
+    box-shadow: none;
+  }
+
+  #tasbeeh-wrap .tb-sel-btn.active {
+    border-color: var(--tb-green);
+    background: var(--tb-green);
+    color: #fff;
+  }
+
+  #tasbeeh-wrap .tb-custom-wrap {
+    display: none;
+    margin-bottom: 16px;
+  }
+
+  #tasbeeh-wrap .tb-custom-input {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--tb-border);
+    border-radius: 6px;
+    background: var(--tb-cream);
+    font-family: 'Amiri', serif;
+    font-size: 15px;
+    color: var(--tb-text);
+    text-align: center;
+    outline: none;
+    line-height: 1.5;
+    box-shadow: none;
+    -moz-appearance: textfield;
+  }
+
+  #tasbeeh-wrap .tb-custom-input::-webkit-outer-spin-button,
+  #tasbeeh-wrap .tb-custom-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  #tasbeeh-wrap .tb-custom-hint {
+    display: block;
+    font-size: 11px;
+    color: var(--tb-muted);
+    margin-top: 6px;
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+
+  #tasbeeh-wrap .tb-count {
+    display: block;
+    font-family: 'Amiri', serif;
+    font-size: 88px;
+    font-weight: 700;
+    color: var(--tb-text);
+    line-height: 1;
+    margin-bottom: 6px;
+    transition: transform 0.1s ease;
+  }
+
+  #tasbeeh-wrap .tb-count.pop {
+    transform: scale(1.1);
+  }
+
+  #tasbeeh-wrap .tb-target {
+    display: block;
+    font-size: 12px;
+    color: var(--tb-muted);
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  #tasbeeh-wrap .tb-progress-wrap {
+    display: block;
+    height: 3px;
+    background: var(--tb-border);
+    border-radius: 2px;
+    margin: 0 auto 28px;
+    width: 80%;
+    overflow: hidden;
+  }
+
+  #tasbeeh-wrap .tb-progress-bar {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--tb-green), var(--tb-green-light));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  #tasbeeh-wrap .tb-btn {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    background: var(--tb-green);
+    color: var(--tb-cream);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Amiri', serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: background 0.15s, transform 0.08s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    line-height: 1.5;
+    text-decoration: none;
+    box-shadow: none;
+  }
+
+  #tasbeeh-wrap .tb-btn:hover {
+    background: var(--tb-green-light);
+  }
+
+  #tasbeeh-wrap .tb-btn:active {
+    background: var(--tb-green-light);
+    transform: scale(0.98);
+  }
+
+  #tasbeeh-wrap .tb-complete-msg {
+    display: none;
+    font-size: 13px;
+    color: var(--tb-gold);
+    letter-spacing: 1px;
+    margin-top: 10px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  #tasbeeh-wrap .tb-complete-msg.show {
+    display: block;
+  }
+
+  #tasbeeh-wrap .tb-divider {
+    display: block;
+    border: none;
+    border-top: 1px solid var(--tb-border);
+    margin: 20px auto;
+    width: 40%;
+  }
+
+  #tasbeeh-wrap .tb-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  #tasbeeh-wrap .tb-small-btn {
+    flex: 1;
+    display: block;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--tb-border);
+    border-radius: 6px;
+    font-family: 'Amiri', serif;
+    font-size: 13px;
+    color: var(--tb-muted);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1.5;
+    text-decoration: none;
+    box-shadow: none;
+  }
+
+  #tasbeeh-wrap .tb-small-btn:hover {
+    border-color: var(--tb-green);
+    color: var(--tb-green);
+  }
+</style>
+
+<div id="tasbeeh-wrap">
+  <span class="tb-ornament">❧ ✦ ❧</span>
+  <span class="tb-phrase" id="tb-phrase">سُبْحَانَ اللَّهِ</span>
+  <span class="tb-meaning" id="tb-meaning">Subhanallah</span>
+
+  <div class="tb-selector">
+    <button class="tb-sel-btn active" data-dhikr="0">سبحان الله</button>
+    <button class="tb-sel-btn" data-dhikr="1">الحمد لله</button>
+    <button class="tb-sel-btn" data-dhikr="2">الله أكبر</button>
+    <button class="tb-sel-btn" data-dhikr="3">لا إله إلا الله</button>
+    <button class="tb-sel-btn" data-dhikr="4">Other</button>
+  </div>
+
+  <div class="tb-custom-wrap" id="tb-custom-wrap">
+    <input class="tb-custom-input" id="tb-custom-input" type="number" min="1" max="9999" value="33" placeholder="Target count" />
+    <span class="tb-custom-hint">Set your target count</span>
+  </div>
+
+  <span class="tb-count" id="tb-count">0</span>
+  <span class="tb-target" id="tb-target">0 / 33</span>
+
+  <div class="tb-progress-wrap">
+    <div class="tb-progress-bar" id="tb-bar"></div>
+  </div>
+
+  <button class="tb-btn" id="tb-main-btn">ذِكْر &nbsp;·&nbsp; Count</button>
+
+  <span class="tb-complete-msg" id="tb-complete">✦ Masha'Allah — set complete ✦</span>
+
+  <hr class="tb-divider">
+
+  <div class="tb-actions">
+    <button class="tb-small-btn" id="tb-undo-btn">− Undo</button>
+    <button class="tb-small-btn" id="tb-reset-btn">Reset</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* All DOM queries scoped to the widget root — never touches outside elements */
+  var root        = document.getElementById('tasbeeh-wrap');
+  var countEl     = root.querySelector('#tb-count');
+  var phraseEl    = root.querySelector('#tb-phrase');
+  var meaningEl   = root.querySelector('#tb-meaning');
+  var targetEl    = root.querySelector('#tb-target');
+  var barEl       = root.querySelector('#tb-bar');
+  var completeEl  = root.querySelector('#tb-complete');
+  var customWrap  = root.querySelector('#tb-custom-wrap');
+  var customInput = root.querySelector('#tb-custom-input');
+  var selBtns     = root.querySelectorAll('.tb-sel-btn');
+
+  var dhikrList = [
+    { arabic: 'سُبْحَانَ اللَّهِ',            roman: 'Subhanallah',       target: 33  },
+    { arabic: 'الْحَمْدُ لِلَّهِ',             roman: 'Alhamdulillah',     target: 33  },
+    { arabic: 'اللَّهُ أَكْبَرُ',              roman: 'Allahu Akbar',      target: 34  },
+    { arabic: 'لَا إِلَٰهَ إِلَّا اللَّهُ',  roman: 'La ilaha illallah', target: 100 },
+    { arabic: '\u2014',                         roman: 'Other',             target: 33  }
+  ];
+
+  var current = 0;
+  var count   = 0;
+
+  function render() {
+    var d = dhikrList[current];
+    countEl.textContent  = count;
+    targetEl.textContent = count + ' / ' + d.target;
+    barEl.style.width    = Math.min(count / d.target * 100, 100) + '%';
+    if (count > 0 && count % d.target === 0) {
+      completeEl.classList.add('show');
+    } else {
+      completeEl.classList.remove('show');
+    }
+  }
+
+  function setDhikr(idx) {
+    current = idx;
+    count   = 0;
+    var d   = dhikrList[idx];
+    phraseEl.textContent  = d.arabic;
+    meaningEl.textContent = d.roman;
+    customWrap.style.display = idx === 4 ? 'block' : 'none';
+    if (idx === 4) {
+      dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
+    }
+    selBtns.forEach(function (btn, i) {
+      btn.classList.toggle('active', i === idx);
+    });
+    render();
+  }
+
+  /* Event listeners attached to scoped elements — no globals, no inline onclick */
+  selBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      setDhikr(parseInt(btn.getAttribute('data-dhikr'), 10));
+    });
+  });
+
+  customInput.addEventListener('input', function () {
+    if (current === 4) {
+      dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
+      render();
+    }
+  });
+
+  root.querySelector('#tb-main-btn').addEventListener('click', function () {
+    count++;
+    countEl.classList.remove('pop');
+    void countEl.offsetWidth; /* force reflow to retrigger CSS animation */
+    countEl.classList.add('pop');
+    setTimeout(function () { countEl.classList.remove('pop'); }, 150);
+    render();
+  });
+
+  root.querySelector('#tb-undo-btn').addEventListener('click', function () {
+    if (count > 0) { count--; render(); }
+  });
+
+  root.querySelector('#tb-reset-btn').addEventListener('click', function () {
+    count = 0;
+    render();
+  });
+
+  render();
+}());
+</script>
