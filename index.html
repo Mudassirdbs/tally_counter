@@ -87,8 +87,8 @@
           </ul>
         </nav>
     
-        <!-- Custom target (Other) -->
-        <div class="tb-custom-wrap" id="tb-custom-wrap" role="group" aria-label="Custom dhikr target">
+        <!-- Custom target & phrase (Other) -->
+        <div class="tb-custom-wrap" id="tb-custom-wrap" role="group" aria-label="Custom dhikr settings">
           <label class="tb-custom-label" for="tb-custom-input">Set your target count</label>
           <input
             class="tb-custom-input"
@@ -97,6 +97,32 @@
             inputmode="numeric"
             aria-label="Custom dhikr target number"
           />
+
+          <label class="tb-custom-label" for="tb-custom-phrase">Custom dhikr text (optional)</label>
+          <div class="tb-custom-phrase-row">
+            <input
+              class="tb-custom-input tb-custom-phrase-input"
+              id="tb-custom-phrase"
+              type="text"
+              maxlength="120"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Custom dhikr text to display while counting"
+              placeholder="Type the dhikr you want to recite"
+            />
+            <button
+              class="tb-mic-btn"
+              id="tb-mic-btn"
+              type="button"
+              aria-label="Use microphone to speak your dhikr"
+              title="Use microphone to speak your dhikr"
+            >
+              Mic
+            </button>
+          </div>
+          <p class="tb-custom-help" aria-hidden="true">
+            You can type or speak what you want to recite.
+          </p>
         </div>
     
         <!-- Counter — grows to fill remaining height on mobile -->
@@ -143,6 +169,18 @@
             >Reset</button>
           </div>
         </div>
+
+        <!-- Simple session summary -->
+        <section class="tb-stats" aria-label="Dhikr summary for today">
+          <p class="tb-stats-line">
+            <span class="tb-stats-label">Today</span>
+            <span class="tb-stats-value" id="tb-stat-today">0 dhikr</span>
+          </p>
+          <p class="tb-stats-line">
+            <span class="tb-stats-label">Completed sets</span>
+            <span class="tb-stats-value" id="tb-stat-sets">0</span>
+          </p>
+        </section>
     
       </article>
     </section>
