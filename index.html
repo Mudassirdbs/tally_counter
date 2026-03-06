@@ -1,0 +1,1562 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap');
+
+    /* ── Outer shell: full-viewport on mobile, centred card on desktop ── */
+    #tasbeeh-shell {
+        all: revert;
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100vw;
+        min-height: 100svh;
+        min-height: 100dvh;
+        background: transparent;
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    #tasbeeh-shell *,
+    #tasbeeh-shell *::before,
+    #tasbeeh-shell *::after {
+        all: revert;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    /* ── Inner card layout ── */
+    #tasbeeh-wrap {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        min-height: 100svh;
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 28px 20px 24px;
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+        background: #ffffff;
+        text-align: center;
+        font-family: 'Amiri', Georgia, serif;
+        color: #1a2e22;
+    }
+
+    /* On desktop (≥ 600px): switch to a centred card */
+    @media (min-width: 600px) {
+        #tasbeeh-shell {
+            min-height: unset;
+            background: transparent;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+
+        #tasbeeh-wrap {
+            min-height: unset;
+            border: 1px solid #d4c9a8;
+            border-radius: 16px;
+            box-shadow: 0 4px 32px rgba(45, 106, 79, 0.10);
+            padding: 36px 32px 28px;
+        }
+    }
+
+    /* ── Top section ── */
+    #tasbeeh-wrap .tb-top {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    #tasbeeh-wrap .tb-ornament {
+        display: block;
+        color: #b5862a;
+        font-size: 13px;
+        letter-spacing: 6px;
+        opacity: 0.55;
+        margin-bottom: 14px;
+        line-height: 1;
+    }
+
+    #tasbeeh-wrap .tb-heading {
+        display: block;
+        font-family: 'Amiri', Georgia, serif;
+        font-size: 11px;
+        font-weight: 700;
+        color: #8a9e8e;
+        letter-spacing: 3.5px;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        line-height: 1.4;
+    }
+
+    #tasbeeh-wrap .tb-subheading {
+        display: block;
+        font-size: 9px;
+        color: #c8bfa0;
+        letter-spacing: 2px;
+        line-height: 1.4;
+    }
+
+    /* Tabs: Dhikr / Simple */
+    #tasbeeh-wrap .tb-tab-nav {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 14px;
+        margin-bottom: 4px;
+    }
+
+    #tasbeeh-wrap .tb-tab-btn {
+        flex: 1;
+        max-width: 180px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid #d4c9a8;
+        background: #f5f1e5;
+        font-family: 'Amiri', serif;
+        font-size: 13px;
+        color: #8a9e8e;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    #tasbeeh-wrap .tb-tab-btn[aria-pressed="true"] {
+        background: #2d6a4f !important;
+        color: #fff !important;
+        border-color: #2d6a4f !important;
+    }
+
+    #tasbeeh-wrap .tb-tab-btn[aria-pressed="false"] {
+        background: #f5f1e5 !important;
+        color: #8a9e8e !important;
+        border-color: #d4c9a8 !important;
+    }
+
+    /* Dhikr phrase */
+    #tasbeeh-wrap .tb-phrase-wrap {
+        display: block;
+        padding: 20px 0 0;
+    }
+
+    #tasbeeh-wrap .tb-phrase {
+        display: block;
+        font-family: 'Noto Naskh Arabic', serif;
+        font-size: clamp(22px, 6vw, 28px);
+        color: #2d6a4f;
+        line-height: 1.7;
+        margin-bottom: 4px;
+        word-break: keep-all;
+    }
+
+    #tasbeeh-wrap .tb-meaning {
+        display: block;
+        font-size: 11px;
+        color: #8a9e8e;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        line-height: 1.5;
+    }
+
+    /* Preset pills */
+    #tasbeeh-wrap nav[aria-label="Select dhikr type"] {
+        position: relative;
+        z-index: 2;
+    }
+
+    #tasbeeh-wrap .tb-selector {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 20px 0 0;
+        list-style: none;
+    }
+
+    /* On very narrow screens */
+    @media (max-width: 380px) {
+        #tasbeeh-wrap .tb-selector {
+            gap: 5px;
+        }
+
+        #tasbeeh-wrap .tb-sel-btn {
+            padding: 6px 10px;
+            min-height: 32px;
+            font-size: 12px;
+        }
+    }
+
+    #tasbeeh-wrap .tb-selector li {
+        display: inline-flex;
+        list-style: none;
+    }
+
+    #tasbeeh-wrap .tb-sel-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 14px;
+        min-height: 36px;
+        border: 1px solid #d4c9a8;
+        border-radius: 20px;
+        background: transparent;
+        font-family: 'Noto Naskh Arabic', serif;
+        font-size: 13px;
+        color: #8a9e8e;
+        cursor: pointer;
+        transition: all 0.15s;
+        -webkit-tap-highlight-color: transparent;
+        white-space: nowrap;
+        line-height: 1.4;
+        text-decoration: none;
+        box-shadow: none;
+    }
+
+    #tasbeeh-wrap .tb-sel-btn[aria-pressed="true"] {
+        border-color: #2d6a4f;
+        background: #2d6a4f;
+        color: #fff;
+    }
+
+    /* Custom target input */
+    #tasbeeh-wrap .tb-custom-wrap {
+        display: none;
+        padding-top: 14px;
+    }
+
+    #tasbeeh-wrap .tb-custom-label {
+        display: block;
+        font-size: 10px;
+        color: #8a9e8e;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+        line-height: 1.5;
+    }
+
+    #tasbeeh-wrap .tb-custom-input {
+        display: block;
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #d4c9a8;
+        border-radius: 8px;
+        background: #fff;
+        font-family: 'Amiri', serif;
+        font-size: 16px;
+        color: #1a2e22;
+        text-align: center;
+        outline: none;
+        line-height: 1.5;
+        box-shadow: none;
+        -moz-appearance: textfield;
+    }
+
+    #tasbeeh-wrap .tb-custom-input::-webkit-outer-spin-button,
+    #tasbeeh-wrap .tb-custom-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    /* Custom phrase + mic row */
+    #tasbeeh-wrap .tb-custom-phrase-row {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        margin-top: 6px;
+    }
+
+    #tasbeeh-wrap .tb-custom-phrase-input {
+        flex: 1;
+        text-align: start;
+        font-size: 15px;
+    }
+
+    #tasbeeh-wrap .tb-mic-btn {
+        flex-shrink: 0;
+        min-width: 64px;
+        padding: 0 12px;
+        border-radius: 8px;
+        border: 1px solid #d4c9a8;
+        background: #f5f1e5;
+        font-family: 'Amiri', serif;
+        font-size: 13px;
+        color: #8a9e8e;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    #tasbeeh-wrap .tb-custom-help {
+        margin-top: 6px;
+        font-size: 10px;
+        color: #b0a58b;
+        letter-spacing: 0.5px;
+    }
+
+    /* Simple tally label */
+    #tasbeeh-wrap .tb-simple-label {
+        margin-top: 10px;
+        text-align: left;
+    }
+
+    /* Counter area */
+    #tasbeeh-wrap .tb-counter-wrap {
+        display: block;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 0;
+        -webkit-user-select: none;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    #tasbeeh-wrap .tb-count {
+        display: inline-block;
+        font-family: 'Amiri', serif;
+        font-size: clamp(96px, 28vw, 140px);
+        font-weight: 700;
+        color: #1a2e22;
+        line-height: 1;
+        margin-bottom: 8px;
+        transition: transform 0.08s ease;
+    }
+
+    #tasbeeh-wrap .tb-count.pop {
+        transform: scale(1.08);
+    }
+
+    #tasbeeh-wrap .tb-target {
+        display: block;
+        font-size: 12px;
+        color: #8a9e8e;
+        letter-spacing: 1px;
+        line-height: 1.5;
+        margin-bottom: 14px;
+    }
+
+    /* Progress bar */
+    #tasbeeh-wrap .tb-progress-wrap {
+        display: block;
+        width: 60%;
+        height: 3px;
+        background: #e0d9c4;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    #tasbeeh-wrap .tb-progress-bar {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #2d6a4f, #40916c);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    /* Completion message */
+    #tasbeeh-wrap .tb-complete-msg {
+        display: none;
+        font-size: 12px;
+        color: #b5862a;
+        letter-spacing: 1px;
+        font-style: italic;
+        margin-top: 12px;
+        line-height: 1.5;
+    }
+
+    #tasbeeh-wrap .tb-complete-msg.show {
+        display: block;
+    }
+
+    /* Bottom controls */
+    #tasbeeh-wrap .tb-controls {
+        display: block;
+        width: 100%;
+        padding-top: 8px;
+    }
+
+    /* Main COUNT button */
+    #tasbeeh-wrap .tb-btn {
+        display: block;
+        width: 100%;
+        padding: 22px 20px;
+        background: #2d6a4f;
+        color: #faf7f0;
+        border: none;
+        border-radius: 12px;
+        font-family: 'Amiri', serif;
+        font-size: clamp(18px, 5vw, 22px);
+        letter-spacing: 1px;
+        cursor: pointer;
+        margin-bottom: 12px;
+        transition: background 0.15s, transform 0.08s;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        line-height: 1.4;
+        text-decoration: none;
+        box-shadow: 0 2px 12px rgba(45, 106, 79, 0.25);
+    }
+
+    /* Undo / Reset row */
+    #tasbeeh-wrap .tb-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    #tasbeeh-wrap .tb-small-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 10px;
+        min-height: 48px;
+        background: transparent;
+        border: 1px solid #d4c9a8;
+        border-radius: 8px;
+        font-family: 'Amiri', serif;
+        font-size: 14px;
+        color: #8a9e8e;
+        cursor: pointer;
+        transition: border-color 0.15s, color 0.15s;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        line-height: 1.4;
+        text-decoration: none;
+        box-shadow: none;
+    }
+
+    /* Stats */
+    #tasbeeh-wrap .tb-stats {
+        margin-top: 14px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(212, 201, 168, 0.7);
+        text-align: left;
+        font-family: 'Amiri', serif;
+    }
+
+    #tasbeeh-wrap .tb-stats-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #8a9e8e;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+
+    #tasbeeh-wrap .tb-stats-label {
+        opacity: 0.85;
+    }
+
+    #tasbeeh-wrap .tb-stats-value {
+        font-weight: 700;
+        color: #2d6a4f;
+    }
+
+    /* Simple tally sub-tabs */
+    #tasbeeh-wrap .tb-simple-subpane[hidden] {
+        display: none !important;
+    }
+
+    #tasbeeh-wrap .tb-simple-subpane {
+        display: block;
+    }
+
+    #tasbeeh-wrap .tb-simple-tab-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(212, 201, 168, 0.5);
+    }
+
+    #tasbeeh-wrap .tb-simple-tab-btn {
+        padding: 6px 12px;
+        border-radius: 16px;
+        border: 1px solid #d4c9a8;
+        background: #f5f1e5;
+        font-family: 'Amiri', serif;
+        font-size: 12px;
+        color: #8a9e8e;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    #tasbeeh-wrap .tb-simple-tab-btn[aria-pressed="true"] {
+        background: #2d6a4f !important;
+        color: #fff !important;
+        border-color: #2d6a4f !important;
+    }
+
+    #tasbeeh-wrap .tb-simple-desc {
+        font-size: 11px;
+        color: #8a9e8e;
+        margin-bottom: 12px;
+        line-height: 1.4;
+    }
+
+    /* Multiple counters */
+    #tasbeeh-wrap .tb-multi-counters {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    #tasbeeh-wrap .tb-multi-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 10px;
+        background: #f9f7f2;
+        border: 1px solid #e8e2d4;
+        border-radius: 10px;
+        flex-wrap: wrap;
+    }
+
+    #tasbeeh-wrap .tb-multi-name {
+        flex: 1 1 100%;
+        font-family: 'Amiri', serif;
+        font-size: 14px;
+        border: none;
+        background: transparent;
+        color: #1a2e22;
+        outline: none;
+        padding: 4px 0;
+        min-width: 0;
+    }
+
+    #tasbeeh-wrap .tb-multi-count-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+    }
+
+    #tasbeeh-wrap .tb-multi-count {
+        font-family: 'Amiri', serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #2d6a4f;
+        min-width: 32px;
+        text-align: center;
+    }
+
+    #tasbeeh-wrap .tb-multi-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid #d4c9a8;
+        background: #fff;
+        color: #2d6a4f;
+        font-size: 18px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    #tasbeeh-wrap .tb-multi-btn.tb-multi-delete {
+        color: #c44;
+        font-size: 16px;
+        width: 32px;
+        height: 32px;
+    }
+
+    #tasbeeh-wrap .tb-add-counter-btn {
+        background: #f5f1e5 !important;
+        color: #2d6a4f !important;
+        border: 2px dashed #d4c9a8 !important;
+        box-shadow: none !important;
+        padding: 14px 20px !important;
+    }
+
+    #tasbeeh-wrap .tb-multi-empty {
+        text-align: center;
+        padding: 24px 16px;
+        color: #8a9e8e;
+        font-size: 13px;
+        font-style: italic;
+    }
+
+    /* Mobile optimizations for multiple counters */
+    @media (max-width: 380px) {
+        #tasbeeh-wrap .tb-multi-item {
+            padding: 6px 8px;
+            gap: 4px;
+        }
+
+        #tasbeeh-wrap .tb-multi-name {
+            font-size: 13px;
+        }
+
+        #tasbeeh-wrap .tb-multi-count {
+            font-size: 16px;
+            min-width: 28px;
+        }
+
+        #tasbeeh-wrap .tb-multi-btn {
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+        }
+    }
+
+    /* Digital counter */
+    #tasbeeh-wrap .tb-digital-display {
+        background: #1a2e22;
+        border-radius: 12px;
+        padding: 24px 20px;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    #tasbeeh-wrap .tb-digital-count {
+        font-family: 'Courier New', monospace;
+        font-size: clamp(32px, 10vw, 48px);
+        font-weight: 700;
+        color: #7fff7f;
+        text-shadow: 0 0 10px rgba(127, 255, 127, 0.3);
+        letter-spacing: 4px;
+    }
+
+    #tasbeeh-wrap .tb-digital-controls {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-bottom: 16px;
+    }
+
+    #tasbeeh-wrap .tb-digital-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid #2d6a4f;
+        background: #fff;
+        color: #2d6a4f;
+        font-size: 24px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: all 0.15s;
+    }
+
+    #tasbeeh-wrap .tb-digital-btn:active {
+        background: #2d6a4f;
+        color: #fff;
+    }
+
+    #tasbeeh-wrap .tb-digital-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    #tasbeeh-wrap .tb-digital-status {
+        font-size: 10px;
+        color: #8a9e8e;
+        text-align: center;
+        letter-spacing: 0.5px;
+    }
+
+    /* Tally Marks */
+    #tasbeeh-wrap .tb-marks-display {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        padding: 16px;
+        background: #f9f7f2;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        min-height: 80px;
+        align-content: flex-start;
+    }
+
+    #tasbeeh-wrap .tb-mark-group {
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        padding: 4px;
+    }
+
+    #tasbeeh-wrap .tb-mark {
+        width: 3px;
+        height: 24px;
+        background: #2d6a4f;
+        border-radius: 1px;
+    }
+
+    #tasbeeh-wrap .tb-mark.tb-mark-diagonal {
+        position: relative;
+        width: 3px;
+        height: 28px;
+        background: #b5862a;
+        transform: rotate(-25deg);
+        transform-origin: bottom left;
+        margin-left: -2px;
+    }
+
+    #tasbeeh-wrap .tb-marks-count {
+        font-size: 14px;
+        color: #8a9e8e;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    #tasbeeh-wrap .tb-marks-count span {
+        font-weight: 700;
+        color: #2d6a4f;
+    }
+
+    @media (hover: hover) {
+        #tasbeeh-wrap .tb-simple-tab-btn:hover:not([aria-pressed="true"]) {
+            border-color: #2d6a4f;
+            color: #2d6a4f;
+        }
+
+        #tasbeeh-wrap .tb-multi-btn:hover {
+            background: #f5f1e5;
+        }
+
+        #tasbeeh-wrap .tb-digital-btn:hover {
+            background: #2d6a4f;
+            color: #fff;
+        }
+    }
+
+    /* Hovers */
+    @media (hover: hover) {
+        #tasbeeh-wrap .tb-tab-btn:hover:not([aria-pressed="true"]) {
+            border-color: #2d6a4f;
+            color: #2d6a4f;
+        }
+
+        #tasbeeh-wrap .tb-btn:hover {
+            background: #40916c;
+        }
+
+        #tasbeeh-wrap .tb-small-btn:hover {
+            border-color: #2d6a4f;
+            color: #2d6a4f;
+        }
+
+        #tasbeeh-wrap .tb-sel-btn:hover:not([aria-pressed="true"]) {
+            border-color: #2d6a4f;
+            color: #2d6a4f;
+        }
+
+        #tasbeeh-wrap .tb-mic-btn:hover {
+            border-color: #2d6a4f;
+            color: #2d6a4f;
+        }
+    }
+</style>
+
+<section id="tasbeeh-shell" lang="en">
+
+    <article id="tasbeeh-wrap" aria-label="Online Tasbih Counter">
+
+        <header class="tb-top">
+            <span class="tb-ornament" aria-hidden="true">❧ ✦ ❧</span>
+            <div class="tb-heading" role="heading" aria-level="1">Tasbih Counter</div>
+            <span class="tb-subheading" aria-hidden="true">Online Digital Dhikr</span>
+        </header>
+
+        <nav class="tb-tab-nav" aria-label="Select counter mode">
+            <button class="tb-tab-btn" id="tb-tab-dhikr" type="button" data-tab="dhikr"
+                aria-pressed="true">Dhikr</button>
+            <button class="tb-tab-btn" id="tb-tab-simple" type="button" data-tab="simple" aria-pressed="false">Simple
+                tally</button>
+        </nav>
+
+        <div class="tb-pane" id="tb-pane-dhikr">
+            <div class="tb-phrase-wrap">
+                <p class="tb-phrase" id="tb-phrase" lang="ar" aria-label="Current dhikr in Arabic">سُبْحَانَ اللَّهِ</p>
+                <p class="tb-meaning" id="tb-meaning">Subhanallah</p>
+            </div>
+
+            <nav aria-label="Select dhikr type">
+                <ul class="tb-selector" role="list">
+                    <li><button class="tb-sel-btn" data-dhikr="0" aria-pressed="true" title="Subhanallah — 33x">سبحان
+                            الله</button></li>
+                    <li><button class="tb-sel-btn" data-dhikr="1" aria-pressed="false" title="Alhamdulillah — 33x">الحمد
+                            لله</button></li>
+                    <li><button class="tb-sel-btn" data-dhikr="2" aria-pressed="false" title="Allahu Akbar — 34x">الله
+                            أكبر</button></li>
+                    <li><button class="tb-sel-btn" data-dhikr="3" aria-pressed="false"
+                            title="La ilaha illallah — 100x">لا إله إلا
+                            الله</button></li>
+                    <li><button class="tb-sel-btn" data-dhikr="4" aria-pressed="false"
+                            title="Custom dhikr">Other</button></li>
+                </ul>
+            </nav>
+
+            <div class="tb-custom-wrap" id="tb-custom-wrap" role="group" aria-label="Custom dhikr settings">
+                <label class="tb-custom-label" for="tb-custom-input">Set your target count</label>
+                <input class="tb-custom-input" id="tb-custom-input" type="number" min="1" max="9999" value="33"
+                    inputmode="numeric" aria-label="Custom dhikr target number" />
+
+                <label class="tb-custom-label" for="tb-custom-phrase">Custom dhikr text (optional)</label>
+                <div class="tb-custom-phrase-row">
+                    <input class="tb-custom-input tb-custom-phrase-input" id="tb-custom-phrase" type="text"
+                        maxlength="120" autocomplete="off" spellcheck="false"
+                        aria-label="Custom dhikr text to display while counting"
+                        placeholder="Type the dhikr you want to recite" />
+                    <button class="tb-mic-btn" id="tb-mic-btn" type="button"
+                        aria-label="Use microphone to speak your dhikr" title="Use microphone to speak your dhikr">
+                        Mic
+                    </button>
+                </div>
+                <p class="tb-custom-help" aria-hidden="true">
+                    You can type or speak what you want to recite.
+                </p>
+            </div>
+
+            <div class="tb-counter-wrap" role="status" aria-live="polite" aria-atomic="true" aria-label="Dhikr count">
+                <span class="tb-count" id="tb-count">0</span>
+                <span class="tb-target" id="tb-target">0 / 33</span>
+
+                <div class="tb-progress-wrap" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                    aria-label="Dhikr progress" id="tb-progress-wrap">
+                    <div class="tb-progress-bar" id="tb-bar"></div>
+                </div>
+
+                <p class="tb-complete-msg" id="tb-complete" role="alert" aria-live="assertive">
+                    ✦ Masha'Allah — set complete ✦
+                </p>
+            </div>
+
+            <div class="tb-controls">
+                <button class="tb-btn" id="tb-main-btn" aria-label="Count dhikr — tap to increment"
+                    title="Tap to count your dhikr">ذِكْر &nbsp;·&nbsp; Count</button>
+
+                <div class="tb-actions">
+                    <button class="tb-small-btn" id="tb-undo-btn" aria-label="Undo last count"
+                        title="Subtract one from the count">− Undo</button>
+                    <button class="tb-small-btn" id="tb-reset-btn" aria-label="Reset counter to zero"
+                        title="Reset the counter back to zero">Reset</button>
+                </div>
+            </div>
+
+            <section class="tb-stats" aria-label="Dhikr summary for today">
+                <p class="tb-stats-line">
+                    <span class="tb-stats-label">Today</span>
+                    <span class="tb-stats-value" id="tb-stat-today">0 dhikr</span>
+                </p>
+                <p class="tb-stats-line">
+                    <span class="tb-stats-label">Completed sets</span>
+                    <span class="tb-stats-value" id="tb-stat-sets">0</span>
+                </p>
+            </section>
+        </div>
+
+        <div class="tb-pane" id="tb-pane-simple" hidden>
+            <!-- Simple Tally Sub-tabs -->
+            <nav class="tb-simple-tab-nav" aria-label="Select tally counter type">
+                <button class="tb-simple-tab-btn" id="tb-simple-tab-single" type="button" data-simple-tab="single" aria-pressed="true">Single</button>
+                <button class="tb-simple-tab-btn" id="tb-simple-tab-multiple" type="button" data-simple-tab="multiple" aria-pressed="false">Multiple</button>
+                <button class="tb-simple-tab-btn" id="tb-simple-tab-digital" type="button" data-simple-tab="digital" aria-pressed="false">Digital</button>
+                <button class="tb-simple-tab-btn" id="tb-simple-tab-marks" type="button" data-simple-tab="marks" aria-pressed="false">Tally Marks</button>
+            </nav>
+
+            <!-- Single Counter -->
+            <div class="tb-simple-subpane" id="tb-simple-subpane-single">
+                <p class="tb-custom-label tb-simple-label">Tally counter</p>
+                <div class="tb-counter-wrap" role="status" aria-live="polite" aria-atomic="true" aria-label="Tally count">
+                    <span class="tb-count" id="tb-simple-count">0</span>
+                </div>
+                <div class="tb-controls">
+                    <button class="tb-btn" id="tb-simple-main-btn" aria-label="Increase tally"
+                        title="Tap to increment the tally">Count</button>
+                    <div class="tb-actions">
+                        <button class="tb-small-btn" id="tb-simple-undo-btn" aria-label="Undo last tally"
+                            title="Subtract one from the tally">− Undo</button>
+                        <button class="tb-small-btn" id="tb-simple-reset-btn" aria-label="Reset tally to zero"
+                            title="Reset the tally back to zero">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multiple Counters -->
+            <div class="tb-simple-subpane" id="tb-simple-subpane-multiple" hidden>
+                <p class="tb-custom-label tb-simple-label">Multiple Tally Counter</p>
+                <p class="tb-simple-desc">Count multiple things at once. Add counters as needed.</p>
+                <div id="tb-multi-counters" class="tb-multi-counters"></div>
+                <button class="tb-btn tb-add-counter-btn" id="tb-add-counter-btn" type="button">+ Add Counter</button>
+            </div>
+
+            <!-- Digital Counter -->
+            <div class="tb-simple-subpane" id="tb-simple-subpane-digital" hidden>
+                <p class="tb-custom-label tb-simple-label">Online Digital Counter</p>
+                <p class="tb-simple-desc">Browser-based counter with auto-save to local storage.</p>
+                <div class="tb-digital-display">
+                    <span class="tb-digital-count" id="tb-digital-count">000000</span>
+                </div>
+                <div class="tb-digital-controls">
+                    <button class="tb-digital-btn tb-digital-up" id="tb-digital-up" aria-label="Increment">▲</button>
+                    <button class="tb-digital-btn tb-digital-down" id="tb-digital-down" aria-label="Decrement">▼</button>
+                </div>
+                <div class="tb-digital-actions">
+                    <button class="tb-small-btn" id="tb-digital-reset">Reset</button>
+                    <button class="tb-small-btn" id="tb-digital-save">Save</button>
+                </div>
+                <p class="tb-digital-status" id="tb-digital-status">Auto-saved to browser</p>
+            </div>
+
+            <!-- Tally Marks Counter -->
+            <div class="tb-simple-subpane" id="tb-simple-subpane-marks" hidden>
+                <p class="tb-custom-label tb-simple-label">Tally Mark Counter</p>
+                <p class="tb-simple-desc">Digital tally marks — no human counting errors.</p>
+                <div class="tb-marks-display" id="tb-marks-display"></div>
+                <div class="tb-marks-count">Count: <span id="tb-marks-count-val">0</span></div>
+                <div class="tb-controls">
+                    <button class="tb-btn" id="tb-marks-add-btn">Add Mark</button>
+                    <div class="tb-actions">
+                        <button class="tb-small-btn" id="tb-marks-undo-btn">− Undo</button>
+                        <button class="tb-small-btn" id="tb-marks-reset-btn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </article>
+</section>
+
+<script>
+    (function () {
+        'use strict';
+
+        var root = document.getElementById('tasbeeh-wrap');
+        if (!root) return;
+
+        var countEl = root.querySelector('#tb-count');
+        var phraseEl = root.querySelector('#tb-phrase');
+        var meaningEl = root.querySelector('#tb-meaning');
+        var targetEl = root.querySelector('#tb-target');
+        var barEl = root.querySelector('#tb-bar');
+        var progressWrap = root.querySelector('#tb-progress-wrap');
+        var completeEl = root.querySelector('#tb-complete');
+        var customWrap = root.querySelector('#tb-custom-wrap');
+        var customInput = root.querySelector('#tb-custom-input');
+        var customPhraseInput = root.querySelector('#tb-custom-phrase');
+        var micBtn = root.querySelector('#tb-mic-btn');
+        var selBtns = root.querySelectorAll('.tb-sel-btn');
+        var statTodayEl = root.querySelector('#tb-stat-today');
+        var statSetsEl = root.querySelector('#tb-stat-sets');
+        var tabDhikrBtn = root.querySelector('#tb-tab-dhikr');
+        var tabSimpleBtn = root.querySelector('#tb-tab-simple');
+        var paneDhikr = root.querySelector('#tb-pane-dhikr');
+        var paneSimple = root.querySelector('#tb-pane-simple');
+        var simpleCountEl = root.querySelector('#tb-simple-count');
+        var simpleMainBtn = root.querySelector('#tb-simple-main-btn');
+        var simpleUndoBtn = root.querySelector('#tb-simple-undo-btn');
+        var simpleResetBtn = root.querySelector('#tb-simple-reset-btn');
+
+        // Simple tally sub-tabs elements
+        var simpleTabBtns = root.querySelectorAll('.tb-simple-tab-btn');
+        var simpleSubpanes = root.querySelectorAll('.tb-simple-subpane');
+
+        // Multiple counters elements
+        var multiCountersContainer = root.querySelector('#tb-multi-counters');
+        var addCounterBtn = root.querySelector('#tb-add-counter-btn');
+        var multiCounters = [];
+
+        // Digital counter elements
+        var digitalCountEl = root.querySelector('#tb-digital-count');
+        var digitalUpBtn = root.querySelector('#tb-digital-up');
+        var digitalDownBtn = root.querySelector('#tb-digital-down');
+        var digitalResetBtn = root.querySelector('#tb-digital-reset');
+        var digitalSaveBtn = root.querySelector('#tb-digital-save');
+        var digitalStatusEl = root.querySelector('#tb-digital-status');
+        var digitalCount = 0;
+
+        // Tally marks elements
+        var marksDisplayEl = root.querySelector('#tb-marks-display');
+        var marksCountValEl = root.querySelector('#tb-marks-count-val');
+        var marksAddBtn = root.querySelector('#tb-marks-add-btn');
+        var marksUndoBtn = root.querySelector('#tb-marks-undo-btn');
+        var marksResetBtn = root.querySelector('#tb-marks-reset-btn');
+        var marksCount = 0;
+        var headingTitleEl = root.querySelector('.tb-heading');
+        var headingSubEl = root.querySelector('.tb-subheading');
+
+        var dhikrList = [
+            { arabic: 'سُبْحَانَ اللَّهِ', roman: 'Subhanallah', target: 33 },
+            { arabic: 'الْحَمْدُ لِلَّهِ', roman: 'Alhamdulillah', target: 33 },
+            { arabic: 'اللَّهُ أَكْبَرُ', roman: 'Allahu Akbar', target: 34 },
+            { arabic: 'لَا إِلَٰهَ إِلَّا اللَّهُ', roman: 'La ilaha illallah', target: 100 },
+            { arabic: '\u2014', roman: 'Other', target: 33 }
+        ];
+
+        var STORAGE_KEY = 'tasbeeh-counter-state-v1';
+
+        var current = 0;
+        var count = 0;
+        var todayTotal = 0;
+        var todaySets = 0;
+        var recognition = null;
+        var audioCtx = null;
+        var simpleCount = 0;
+
+        function todayKey() {
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function updateStatsUI() {
+            if (statTodayEl) {
+                statTodayEl.textContent = todayTotal + ' dhikr';
+            }
+            if (statSetsEl) {
+                statSetsEl.textContent = String(todaySets);
+            }
+        }
+
+        function updateCustomPhrase() {
+            if (!customPhraseInput) return;
+            var text = customPhraseInput.value.trim();
+            if (!text) {
+                dhikrList[4].arabic = '\u2014';
+                dhikrList[4].roman = 'Custom dhikr';
+            } else {
+                dhikrList[4].arabic = text;
+                dhikrList[4].roman = 'Custom dhikr';
+            }
+            if (current === 4) {
+                phraseEl.textContent = dhikrList[4].arabic;
+                meaningEl.textContent = dhikrList[4].roman;
+            }
+        }
+
+        function saveState() {
+            try {
+                var state = {
+                    version: 1,
+                    current: current,
+                    count: count,
+                    dhikrList: {
+                        customTarget: dhikrList[4].target,
+                        customPhrase: (customPhraseInput && customPhraseInput.value) || ''
+                    },
+                    customInputValue: customInput ? customInput.value : null,
+                    todayDate: todayKey(),
+                    todayTotal: todayTotal,
+                    todaySets: todaySets,
+                    simpleCount: simpleCount,
+                    multiCounters: multiCounters,
+                    digitalCount: digitalCount,
+                    marksCount: marksCount
+                };
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) { }
+        }
+
+        function render() {
+            var d = dhikrList[current];
+            var pct = Math.min(count / d.target * 100, 100);
+            countEl.textContent = count;
+            targetEl.textContent = count + ' / ' + d.target;
+            barEl.style.width = pct + '%';
+            progressWrap.setAttribute('aria-valuenow', Math.round(pct));
+            if (count > 0 && count % d.target === 0) {
+                completeEl.classList.add('show');
+            } else {
+                completeEl.classList.remove('show');
+            }
+
+            if (current === 4 && customWrap) {
+                customWrap.style.display = count >= 5 ? 'none' : 'block';
+            }
+
+            updateStatsUI();
+        }
+
+        function renderSimple() {
+            if (simpleCountEl) {
+                simpleCountEl.textContent = String(simpleCount);
+            }
+        }
+
+        // Simple tally sub-tab switching
+        function setSimpleSubTab(tabName) {
+            simpleSubpanes.forEach(function(pane) {
+                pane.setAttribute('hidden', '');
+            });
+            simpleTabBtns.forEach(function(btn) {
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            var targetPane = root.querySelector('#tb-simple-subpane-' + tabName);
+            var targetBtn = root.querySelector('#tb-simple-tab-' + tabName);
+            if (targetPane) {
+                targetPane.removeAttribute('hidden');
+            }
+            if (targetBtn) {
+                targetBtn.setAttribute('aria-pressed', 'true');
+            }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Multiple counters functions
+        function renderMultiCounters() {
+            if (!multiCountersContainer) return;
+            multiCountersContainer.innerHTML = '';
+
+            // Show empty state message if no counters
+            if (multiCounters.length === 0) {
+                var emptyMsg = document.createElement('div');
+                emptyMsg.className = 'tb-multi-empty';
+                emptyMsg.textContent = 'No counters yet. Click "+ Add Counter" to start.';
+                multiCountersContainer.appendChild(emptyMsg);
+            }
+
+            multiCounters.forEach(function(counter, idx) {
+                var item = document.createElement('div');
+                item.className = 'tb-multi-item';
+                item.innerHTML =
+                    '<input type="text" class="tb-multi-name" placeholder="Counter name" value="' + escapeHtml(counter.name || '') + '" data-idx="' + idx + '">' +
+                    '<div class="tb-multi-count-wrap">' +
+                    '<button class="tb-multi-btn tb-multi-minus" data-idx="' + idx + '" aria-label="Decrease">−</button>' +
+                    '<span class="tb-multi-count">' + counter.count + '</span>' +
+                    '<button class="tb-multi-btn tb-multi-plus" data-idx="' + idx + '" aria-label="Increase">+</button>' +
+                    '<button class="tb-multi-btn tb-multi-delete" data-idx="' + idx + '" aria-label="Delete">×</button>' +
+                    '</div>';
+                multiCountersContainer.appendChild(item);
+            });
+
+            // Attach event listeners
+            multiCountersContainer.querySelectorAll('.tb-multi-name').forEach(function(input) {
+                input.addEventListener('change', function() {
+                    var idx = parseInt(this.getAttribute('data-idx'), 10);
+                    // Limit name length and trim whitespace
+                    var name = this.value.trim().substring(0, 50);
+                    multiCounters[idx].name = name;
+                    this.value = name; // Update input with trimmed value
+                    saveState();
+                });
+            });
+            multiCountersContainer.querySelectorAll('.tb-multi-plus').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var idx = parseInt(this.getAttribute('data-idx'), 10);
+                    multiCounters[idx].count++;
+                    renderMultiCounters();
+                    saveState();
+                });
+            });
+            multiCountersContainer.querySelectorAll('.tb-multi-minus').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var idx = parseInt(this.getAttribute('data-idx'), 10);
+                    if (multiCounters[idx].count > 0) {
+                        multiCounters[idx].count--;
+                        renderMultiCounters();
+                        saveState();
+                    }
+                });
+            });
+            multiCountersContainer.querySelectorAll('.tb-multi-delete').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var idx = parseInt(this.getAttribute('data-idx'), 10);
+                    multiCounters.splice(idx, 1);
+                    renderMultiCounters();
+                    saveState();
+                });
+            });
+        }
+
+        function addMultiCounter() {
+            // Limit max counters to prevent performance issues
+            if (multiCounters.length >= 50) {
+                alert('Maximum 50 counters allowed. Please delete some counters first.');
+                return;
+            }
+            multiCounters.push({ name: 'Counter ' + (multiCounters.length + 1), count: 0 });
+            renderMultiCounters();
+            saveState();
+        }
+
+        // Digital counter functions
+        function renderDigital() {
+            if (digitalCountEl) {
+                digitalCountEl.textContent = String(digitalCount).padStart(6, '0');
+            }
+        }
+
+        function showDigitalStatus(msg) {
+            if (digitalStatusEl) {
+                digitalStatusEl.textContent = msg;
+                setTimeout(function() {
+                    digitalStatusEl.textContent = 'Auto-saved to browser';
+                }, 2000);
+            }
+        }
+
+        // Tally marks functions
+        function renderTallyMarks() {
+            if (!marksDisplayEl || !marksCountValEl) return;
+            marksCountValEl.textContent = marksCount;
+            marksDisplayEl.innerHTML = '';
+            var groups = Math.floor(marksCount / 5);
+            var remainder = marksCount % 5;
+            for (var i = 0; i < groups; i++) {
+                var group = document.createElement('div');
+                group.className = 'tb-mark-group';
+                group.innerHTML =
+                    '<div class="tb-mark"></div>' +
+                    '<div class="tb-mark"></div>' +
+                    '<div class="tb-mark"></div>' +
+                    '<div class="tb-mark"></div>' +
+                    '<div class="tb-mark tb-mark-diagonal"></div>';
+                marksDisplayEl.appendChild(group);
+            }
+            if (remainder > 0) {
+                var remGroup = document.createElement('div');
+                remGroup.className = 'tb-mark-group';
+                for (var j = 0; j < remainder; j++) {
+                    remGroup.innerHTML += '<div class="tb-mark"></div>';
+                }
+                marksDisplayEl.appendChild(remGroup);
+            }
+        }
+
+        function setDhikr(idx) {
+            current = idx;
+            count = 0;
+            var d = dhikrList[idx];
+            phraseEl.textContent = d.arabic;
+            meaningEl.textContent = d.roman;
+            customWrap.style.display = idx === 4 ? 'block' : 'none';
+            if (idx === 4) {
+                dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
+                updateCustomPhrase();
+            }
+            selBtns.forEach(function (btn, i) {
+                btn.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
+            });
+            render();
+            saveState();
+        }
+
+        function loadState() {
+            try {
+                var raw = window.localStorage.getItem(STORAGE_KEY);
+                if (!raw) {
+                    setDhikr(0);
+                    render();
+                    updateStatsUI();
+                    renderSimple();
+                    return;
+                }
+                var state = JSON.parse(raw);
+                if (!state || typeof state !== 'object') return;
+
+                var savedDate = state.todayDate;
+                var today = todayKey();
+
+                current = typeof state.current === 'number' ? state.current : 0;
+                count = typeof state.count === 'number' ? state.count : 0;
+
+                if (state.dhikrList && typeof state.dhikrList.customTarget === 'number') {
+                    dhikrList[4].target = state.dhikrList.customTarget;
+                }
+                if (customInput && typeof state.customInputValue === 'string') {
+                    customInput.value = state.customInputValue;
+                }
+                if (customPhraseInput && state.dhikrList && typeof state.dhikrList.customPhrase === 'string') {
+                    customPhraseInput.value = state.dhikrList.customPhrase;
+                    updateCustomPhrase();
+                }
+
+                if (savedDate === today) {
+                    todayTotal = typeof state.todayTotal === 'number' ? state.todayTotal : 0;
+                    todaySets = typeof state.todaySets === 'number' ? state.todaySets : 0;
+                } else {
+                    todayTotal = 0;
+                    todaySets = 0;
+                }
+
+                setDhikr(current);
+                count = state.count || 0;
+                render();
+                updateStatsUI();
+
+                if (typeof state.simpleCount === 'number') {
+                    simpleCount = state.simpleCount;
+                }
+                if (state.multiCounters && Array.isArray(state.multiCounters)) {
+                    // Validate each counter has required properties
+                    multiCounters = state.multiCounters.filter(function(c) {
+                        return c && typeof c === 'object' &&
+                               typeof c.count === 'number' &&
+                               c.count >= 0 &&
+                               (!c.name || typeof c.name === 'string');
+                    }).map(function(c) {
+                        return {
+                            name: (c.name || '').substring(0, 50),
+                            count: Math.max(0, Math.floor(c.count))
+                        };
+                    });
+                }
+                if (typeof state.digitalCount === 'number') {
+                    digitalCount = state.digitalCount;
+                }
+                if (typeof state.marksCount === 'number') {
+                    marksCount = state.marksCount;
+                }
+                renderSimple();
+                renderMultiCounters();
+                renderDigital();
+                renderTallyMarks();
+            } catch (e) { }
+        }
+
+        function playCompletionTone() {
+            try {
+                var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextCtor) return;
+                if (!audioCtx) {
+                    audioCtx = new AudioContextCtor();
+                }
+                var osc = audioCtx.createOscillator();
+                var gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 880;
+                var now = audioCtx.currentTime;
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.linearRampToValueAtTime(0.2, now + 0.02);
+                gain.gain.linearRampToValueAtTime(0.0001, now + 0.18);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            } catch (e) { }
+        }
+
+        function setMode(tab) {
+            if (!paneDhikr || !paneSimple || !tabDhikrBtn || !tabSimpleBtn) return;
+            var isDhikr = tab !== 'simple';
+            if (isDhikr) {
+                paneDhikr.hidden = false;
+                paneDhikr.style.display = '';
+                paneSimple.hidden = true;
+                paneSimple.style.display = 'none';
+                if (headingTitleEl && headingSubEl) {
+                    headingTitleEl.textContent = 'Tasbih Counter';
+                    headingSubEl.textContent = 'Online Digital Dhikr';
+                }
+            } else {
+                paneDhikr.hidden = true;
+                paneDhikr.style.display = 'none';
+                paneSimple.hidden = false;
+                paneSimple.style.display = '';
+                if (headingTitleEl && headingSubEl) {
+                    headingTitleEl.textContent = 'Tally Counter';
+                    headingSubEl.textContent = 'Plain number counting';
+                }
+            }
+            tabDhikrBtn.setAttribute('aria-pressed', isDhikr ? 'true' : 'false');
+            tabSimpleBtn.setAttribute('aria-pressed', isDhikr ? 'false' : 'true');
+        }
+
+        selBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                setDhikr(parseInt(btn.getAttribute('data-dhikr'), 10));
+            });
+        });
+
+        customInput.addEventListener('input', function () {
+            if (current === 4) {
+                dhikrList[4].target = Math.max(1, parseInt(customInput.value, 10) || 33);
+                render();
+                saveState();
+            }
+        });
+
+        if (customPhraseInput) {
+            customPhraseInput.addEventListener('input', function () {
+                if (current === 4) {
+                    updateCustomPhrase();
+                }
+                saveState();
+            });
+        }
+
+        if (micBtn && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+            var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ar-SA';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            micBtn.addEventListener('click', function () {
+                try { recognition.start(); } catch (e) { }
+            });
+
+            recognition.addEventListener('result', function (event) {
+                if (!event.results || !event.results[0] || !event.results[0][0]) return;
+                var transcript = event.results[0][0].transcript;
+                if (!customPhraseInput) return;
+                customPhraseInput.value = transcript;
+                updateCustomPhrase();
+                saveState();
+            });
+        } else if (micBtn) {
+            micBtn.style.display = 'none';
+        }
+
+        root.querySelector('#tb-main-btn').addEventListener('click', function () {
+            var d = dhikrList[current];
+            count++;
+            todayTotal++;
+            if (count > 0 && count % d.target === 0) {
+                todaySets++;
+                playCompletionTone();
+            }
+            countEl.classList.remove('pop');
+            void countEl.offsetWidth;
+            countEl.classList.add('pop');
+            setTimeout(function () { countEl.classList.remove('pop'); }, 120);
+            render();
+            saveState();
+        });
+
+        root.querySelector('#tb-undo-btn').addEventListener('click', function () {
+            if (count > 0) {
+                var d = dhikrList[current];
+                if (count % d.target === 0 && todaySets > 0) {
+                    todaySets--;
+                }
+                count--;
+                if (todayTotal > 0) {
+                    todayTotal--;
+                }
+                render();
+                saveState();
+            }
+        });
+
+        root.querySelector('#tb-reset-btn').addEventListener('click', function () {
+            count = 0;
+            render();
+            saveState();
+        });
+
+        if (simpleMainBtn && simpleUndoBtn && simpleResetBtn) {
+            simpleMainBtn.addEventListener('click', function () {
+                simpleCount++;
+                renderSimple();
+                saveState();
+            });
+
+            simpleUndoBtn.addEventListener('click', function () {
+                if (simpleCount > 0) {
+                    simpleCount--;
+                    renderSimple();
+                    saveState();
+                }
+            });
+
+            simpleResetBtn.addEventListener('click', function () {
+                simpleCount = 0;
+                renderSimple();
+                saveState();
+            });
+        }
+
+        if (tabDhikrBtn && tabSimpleBtn) {
+            tabDhikrBtn.addEventListener('click', function () { setMode('dhikr'); });
+            tabSimpleBtn.addEventListener('click', function () { setMode('simple'); });
+        }
+
+        // Simple tally sub-tab event listeners
+        simpleTabBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var tabName = this.getAttribute('data-simple-tab');
+                setSimpleSubTab(tabName);
+            });
+        });
+
+        // Multiple counters event listeners
+        if (addCounterBtn) {
+            addCounterBtn.addEventListener('click', addMultiCounter);
+        }
+
+        // Digital counter event listeners
+        if (digitalUpBtn) {
+            digitalUpBtn.addEventListener('click', function() {
+                digitalCount++;
+                renderDigital();
+                saveState();
+                showDigitalStatus('Saved!');
+            });
+        }
+        if (digitalDownBtn) {
+            digitalDownBtn.addEventListener('click', function() {
+                if (digitalCount > 0) {
+                    digitalCount--;
+                    renderDigital();
+                    saveState();
+                    showDigitalStatus('Saved!');
+                }
+            });
+        }
+        if (digitalResetBtn) {
+            digitalResetBtn.addEventListener('click', function() {
+                digitalCount = 0;
+                renderDigital();
+                saveState();
+                showDigitalStatus('Reset!');
+            });
+        }
+        if (digitalSaveBtn) {
+            digitalSaveBtn.addEventListener('click', function() {
+                saveState();
+                showDigitalStatus('Saved!');
+            });
+        }
+
+        // Tally marks event listeners
+        if (marksAddBtn) {
+            marksAddBtn.addEventListener('click', function() {
+                marksCount++;
+                renderTallyMarks();
+                saveState();
+            });
+        }
+        if (marksUndoBtn) {
+            marksUndoBtn.addEventListener('click', function() {
+                if (marksCount > 0) {
+                    marksCount--;
+                    renderTallyMarks();
+                    saveState();
+                }
+            });
+        }
+        if (marksResetBtn) {
+            marksResetBtn.addEventListener('click', function() {
+                marksCount = 0;
+                renderTallyMarks();
+                saveState();
+            });
+        }
+
+        loadState();
+        render();
+        renderSimple();
+        renderMultiCounters();
+        renderDigital();
+        renderTallyMarks();
+        setSimpleSubTab('single');
+        setMode('dhikr');
+    }());
+</script>
